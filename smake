@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# smake (sound make)
+# sdo (sound do)
+
+# runs COMMAND with all arguments
+# if successful, plays a random file from ~/.smake/good
+# if unsuccessful, plays a random file from ~/.smake/bad
+
+# usage: smake [MAKE_OPTIONS]
+#        e.g.
+#        smake -C Release all
+
+if [ "$1" == "-h" -o "$1" == "--help" ]; then
+    echo "usage:"
+    echo "smake [MAKE_OPTIONS]"
+    echo "sdo [ANY_COMMAND]"
+    echo "a sound file in ~/.smake/good or ~/.smake/bad will be played upon exit"
+fi
+
+SOUNDDIR=~/.smake
+
+if [ ! -e $SOUNDDIR ]; then
+    if [ -r /usr/share/sounds/smake ]; then
+        cp -r /usr/share/sounds/smake $SOUNDDIR
+    else
+        echo "Please insert sound (.wav, .ogv, .mp3, etc) files into $SOUNDDIR/good and $SOUNDDIR/bad to use sdo or smake."
+        exit
+    fi
+fi
+
+COMMAND=$@
+
+if [[ "$0" == *smake* ]]; then
+    COMMAND="make $@"
+fi
+
+if $COMMAND; then
+    files=(~/.smake/good/*)
+else
+    files=(~/.smake/bad/*)
+fi
+
+# to debug errors with a particular file, remove the '&> /dev/null'
+mplayer ${files[RANDOM % ${#files[@]}]} &> /dev/null &
