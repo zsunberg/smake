@@ -9,3 +9,7 @@ smake [MAKE_OPTIONS]
 sdo [ANY_COMMAND]
 a sound file in ~/.smake/good or ~/.smake/bad will be played upon exit
 ```
+
+There is a deb package for easy installation here: https://www.dropbox.com/s/65wm4nbuumo5jii/smake_1.0-1_all.deb?dl=0
+
+Would like to make a snap package, but haven't had the time to figure out how to do that.
